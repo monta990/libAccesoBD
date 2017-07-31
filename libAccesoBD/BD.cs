@@ -456,6 +456,7 @@ namespace libAccesoBD
             }
             finally
             {
+                AsignarPrenda(id_prenda,id_deudor); // asiga prenda al crear deudor
                 DesconectarDB();
             }
             return res;
@@ -485,6 +486,7 @@ namespace libAccesoBD
             }
             finally
             {
+                AsignarPrenda(id_prenda, id_deudor); //reasigna prenda al editar deudor
                 DesconectarDB();
             }
             return res;
@@ -551,7 +553,7 @@ namespace libAccesoBD
             return res;
         }
         // fin leer prenda
-        // leer prenda
+        // leer ID de prenda
         public bool LeerPrendaID(string id) //Leer Prestamos
         {
             bool res = false;
@@ -580,7 +582,126 @@ namespace libAccesoBD
             }
             return res;
         }
-        // fin leer prenda
+        // fin leer ID de prenda
+        // inicio de crear prestamo
+        public bool CrearPrenda(string tipo, string nombre, string descripcion, string detalles) //crea prestamo
+        {
+            bool res = false;
+            try
+            {
+                string query = "INSERT INTO `prenda` (`tipo`, `nombre`, `descripcion`, `detalles`) VALUES ('" + tipo + "', '" + nombre + "', '" + descripcion + "', '" + detalles + "')";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "No se creo la prenda: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        // fin de crear prenda
+        // Inicio Editar prenda
+        public bool EditarPrenda(string id, string tipo, string nombre, string descripcion, string detalles) //crea prestamo
+        {
+            bool res = false;
+            try
+            {
+                string query = "UPDATE prenda SET tipo = '" + tipo + "', nombre = '" + nombre + "', descripcion = '" + descripcion + "', detalles = '" + detalles + "' WHERE id = '" + id + "'";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "No se creo actualizo la prenda: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        // Fin de Editar prenda
+        // Inicio Asignar prenda
+        public bool AsignarPrenda(string id, string id_deudor) //crea prestamo
+        {
+            bool res = false;
+            try
+            {
+                string query = "UPDATE prenda SET id_deudor = '" + id_deudor + "' WHERE id = '" + id + "'";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "No se creo actualizo la prenda: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        // Fin de Asignar prenda
+        // inicio de eliminar prenda
+        public bool EliminarPrenda(string id) //Elimina usuario
+        {
+            bool res = false;
+            try
+            {
+                string query = "DELETE FROM prenda WHERE id = '" + id + "'";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true; //no lo cambia
+            }
+            catch (MySqlException msedel)
+            {
+                Error = "Error SQL: " + msedel.Message;
+            }
+            catch (Exception generaldel)
+            {
+                Error = "La prendo no existe o fue eliminada anteriormente: " + generaldel.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        // fin de eliminar prenda
+        // InicioAsignar Prenda
+        
+        // Fin Asignar Prenda
         // fin de modulo prenda
         // fin de conexión mysql
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
