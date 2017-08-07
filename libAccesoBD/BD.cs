@@ -15,10 +15,9 @@ namespace libAccesoBD
         SqlConnection con2;  //sql conexión
         MySqlCommand com; //comandos a realizar mysql
         SqlCommand com2; //sql conexión
-        public static string Error; //guarda el mensaje de erro
+        public static string Error, Error2; //guarda el mensaje de erro
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
-        //public static DataTable dt;
         public static MySqlDataReader Lector; //lector mysql
         public static SqlDataReader Lector2; //lector sql
 
@@ -29,8 +28,6 @@ namespace libAccesoBD
             bool res = false;
             try
             {
-                //                         Server=myServerAddress;Database=myDataBase;Uid=myUsername;Pwd=myPassword;
-                //con = new MySqlConnection("Server = MYSQL5013.SmarterASP.NET;Database=db_a14f18_proguth;Uid=a14f18_proguth;Pwd=pr0gCon0");  //online
                 con = new MySqlConnection("Server = 127.0.0.1;Database=prestamos;Uid=root;Pwd=alvarez");  //offline
                 con.Open();
                 res = true;
@@ -134,36 +131,6 @@ namespace libAccesoBD
         }
         // fin de modulo login
         // incio de modulo usuarios
-        // cargar lista de usuarios
-        public bool LeerUsuarios() //Leer usuarios
-        {
-            bool res = false;
-            try
-            {
-                string query = "SELECT * FROM usuarios";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                Lector = com.ExecuteReader();
-                res = true;
-            }
-            catch (MySqlException mse)
-            {
-                Error = "Error SQL: " + mse.Message;
-            }
-            catch (Exception general)
-            {
-                Error = "El usuario no existe: " + general.Message;
-            }
-            finally
-            {
-                //DesconectarDB();
-            }
-            return res;
-        }
-        // fin de cargar lista de usuarios
         // inicio querys modulo usuarios
         public bool CrearUsuario(string nivel, string usuario, string pass, string nombre, string ap1, string ap2, string email, string estado) //Crea usuario
         {
@@ -193,35 +160,6 @@ namespace libAccesoBD
             return res;
         }
         // fin de crear usuario
-        // inicio de eliminar usuario
-        public bool EliminarUsuario(string usuario) //Elimina usuario
-        {
-            bool res = false;
-            try
-            {
-                string query = "DELETE FROM usuarios WHERE user = '" + usuario + "'";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                res = true; //no lo cambia
-            }
-            catch (MySqlException msedel)
-            {
-                Error = "Error SQL: " + msedel.Message;
-            }
-            catch (Exception generaldel)
-            {
-                Error = "El usuario no existe o fue eliminado anteriormente: " + generaldel.Message;
-            }
-            finally
-            {
-                DesconectarDB();
-            }
-            return res;
-        }
-        // fin de eliminar usuario
         // incio de editar usuario
         public bool EditarUsuario(string nivel, string usuario, string pass, string nombre, string ap1, string ap2, string email, string estado) //Edita Usuario
         {
@@ -253,36 +191,6 @@ namespace libAccesoBD
         // fin de editar usuario
         // fin de modulo usuario
         // inicio de modulo deudor
-        // cargar lista de deudores
-        public bool LeerDeudores() //Leer usuarios
-        {
-            bool res = false;
-            try
-            {
-                string query = "SELECT * FROM deudores";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                Lector = com.ExecuteReader();
-                res = true;
-            }
-            catch (MySqlException mse)
-            {
-                Error = "Error SQL: " + mse.Message;
-            }
-            catch (Exception general)
-            {
-                Error = "El usuario no existe: " + general.Message;
-            }
-            finally
-            {
-                //DesconectarDB();
-            }
-            return res;
-        }
-        // fin de cargar lista de deudores
         // inicio de crear deudor
         public bool CrearDeudor(string nombre, string ap1, string ap2, string ine, string calle, string nodom, string colonia, string ciudad, string codpostal, string estado, string tel, string AvalNombre, string AvalTelefono, string email) //Agrega un material a una carrera
         {
@@ -312,35 +220,6 @@ namespace libAccesoBD
             return res;
         }
         // fin de crear deudor
-        // inicio de eliminar deudor
-        public bool EliminarDeudor(string id) //Elimina usuario
-        {
-            bool res = false;
-            try
-            {
-                string query = "DELETE FROM deudores WHERE id = '" + id + "'";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                res = true; //no lo cambia
-            }
-            catch (MySqlException msedel)
-            {
-                Error = "Error SQL: " + msedel.Message;
-            }
-            catch (Exception generaldel)
-            {
-                Error = "El usuario no existe o fue eliminado anteriormente: " + generaldel.Message;
-            }
-            finally
-            {
-                DesconectarDB();
-            }
-            return res;
-        }
-        // fin de eliminar deudor
         // incio de editar deudor
         public bool EditarDeudor(string id, string nombre, string ap1, string ap2, string ine, string calle, string nodom, string colonia, string ciudad, string codpostal, string estado, string tel, string AvalNombre, string AvalTelefono, string email) //Edita Usuario
         {
@@ -700,12 +579,74 @@ namespace libAccesoBD
         }
         // fin de eliminar prenda
         // InicioAsignar Prenda
-        
+
         // Fin Asignar Prenda
         // fin de modulo prenda
         // fin de conexión mysql
+        
         //------------------------------------------------------------------------------------------------------------------------------------------------------------------------------//
-        // inicio modulo sql
-        // fin modulo sql
+
+        // inicio de querys genericas
+        // inicio de leer todo
+        public bool Leer(string campos, string tabla) //Leer Prestamos
+        {
+            bool res = false;
+            try
+            {
+                string query = "SELECT " + campos + " FROM " + tabla + "";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                Lector = com.ExecuteReader();
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "Error: " + general.Message;
+            }
+            finally
+            {
+                //DesconectarDB();
+            }
+            return res;
+        }
+        // fin de leer todo
+        // inicio de eliminar
+        public bool Eliminar(string tabla, string donde, string id)
+        {
+            bool res = false;
+            try
+            {
+                string query = "DELETE FROM " + tabla + " WHERE " + donde + "= " + "'" + id + "'";
+                Error2 = query;
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true; //no lo cambia
+            }
+            catch (MySqlException msedel)
+            {
+                Error = "Error SQL: " + msedel.Message;
+            }
+            catch (Exception generaldel)
+            {
+                Error = "Se elimino anteriormente: " + generaldel.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        // fin de eliminar
+        // fin de querys genericas
     }
 }
