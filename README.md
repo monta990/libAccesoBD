@@ -1,5 +1,5 @@
 # libAccesoBD
-Librería de base de datos para PerLoan
+Librería para acceso a base de datos en MySQL para PerLoan
 
 Sistema Perloan para prestamos personales
 https://github.com/monta990/prestamo
