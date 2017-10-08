@@ -6,7 +6,7 @@ using System.Runtime.InteropServices;
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
 [assembly: AssemblyTitle("libAccesoBD")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyDescription("Acceso a MySQL, MSSql Server y PostgreSQL")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("libAccesoBD")]

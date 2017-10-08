@@ -1,0 +1,278 @@
+﻿using System;
+using System.Data;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using MySql.Data.MySqlClient;
+
+namespace libAccesoBD
+{
+    public class MySQL
+    {
+        MySqlConnection con; // mysql conexión
+        MySqlCommand com; //comandos a realizar mysql
+        public static string Error, Error2; //guarda el mensaje de error
+        public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
+        public static int valor; //nivel de acceso
+        public static MySqlDataReader Lector; //lector mysql
+
+        #region Metodos MySQL
+        /// <summary>
+        /// Conecta BD MySQL, regresa true o false
+        /// </summary>
+        /// <returns>Regresa True o False</returns>
+        public bool ConectaDB()
+        {
+            bool res = false;
+            try
+            {
+                //con = new MySqlConnection("Server = mysql5012.smarterasp.net;Database=db_a29873_perloan;Uid=a29873_perloan;Pwd=elias986");  //online
+                con = new MySqlConnection("Server = 127.0.0.1;Database=prestamos;Uid=root;Pwd=alvarez");  //offline
+                con.Open();
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL al conectar. " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "Error general al conectar. " + general.Message;
+            }
+            return res;
+        }
+        /// <summary>
+        /// Desconecta de BD MySQL, regresa true o false
+        /// </summary>
+        /// <returns>Regresa True o False</returns>
+        public bool DesconectarDB()
+        {
+            bool res = false;
+            try
+            {
+                if (con.State == System.Data.ConnectionState.Open) //verifica conexión abierta
+                {
+                    con.Close();
+                    res = true;
+                }
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL al desconectar. " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "Error general al desconectar. " + general.Message;
+            }
+            return res;
+        }
+        /// <summary>
+        /// Inicia sesión usando MySQL, recibe nombre de usuario y contraseña
+        /// </summary>
+        /// <param name="usuario">Nombre Usuarios</param>
+        /// <param name="pass">Contraseña Usuario</param>
+        /// <returns></returns>
+        public bool Login(string usuario, string pass)
+        {
+            bool res = false;
+            try
+            {
+                string query = "SELECT * FROM usuarios WHERE user = '" + usuario + "' AND pass = '" + pass + "'";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                Lector = com.ExecuteReader();
+                if (!Lector.HasRows)
+                {
+                    Error = "Usuario y contraseña incorrectos. ";
+                    res = false;
+                }
+                else
+                {
+                    while (Lector.Read())
+                    {
+                        if (Lector.GetString(7) == "No") //verifica si usuario esta activo
+                        {
+                            Error = "Usuario Inactivo. ";
+                            res = false;
+                        }
+                        else
+                        {
+                            nombre = Lector.GetString(3);
+                            ApellidoP = Lector.GetString(4);
+                            ApellidoM = Lector.GetString(5);
+                            nivel = Lector.GetString(0);
+                            if (Lector.GetString(0) == "Administrador") //verifica si es admin
+                            {
+                                valor = 0;
+                                res = true;
+                            }
+                            if (Lector.GetString(0) == "Cobrador") //verifica si es cobrador
+                            {
+                                valor = 1;
+                                res = true;
+                            }
+                        }
+
+                    }
+                }
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL al Seleccionar. " + mse.Message;
+            }
+            catch (Exception gen)
+            {
+                Error = "Error de conexión a la BD. " + gen.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        /// <summary>
+        /// Consulta Select MySQL, indicar campos y tabla
+        /// </summary>
+        /// <param name="campos">campos a leer</param>
+        /// <param name="tabla">tabla a leer</param>
+        /// <returns></returns>
+        public bool Leer(string campos, string tabla)
+        {
+            bool res = false;
+            try
+            {
+                string query = "SELECT " + campos + " FROM " + tabla + "";
+                Error2 = query;
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                Lector = com.ExecuteReader();
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "Error: " + general.Message;
+            }
+            finally
+            {
+                //DesconectarDB();
+            }
+            return res;
+        }
+        /// <summary>
+        /// Eliminar datos MySQL, indicando tabla, WHERE y id
+        /// </summary>
+        /// <param name="tabla">Tabla donde se va eliminar</param>
+        /// <param name="donde">Que eliminar</param>
+        /// <param name="id">Identificador</param>
+        /// <returns>Regresa True o False</returns>
+        public bool Eliminar(string tabla, string donde, string id)
+        {
+            bool res = false;
+            try
+            {
+                string query = "DELETE FROM " + tabla + " WHERE " + donde + "= " + "'" + id + "'";
+                Error2 = query;
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true; //no lo cambia
+            }
+            catch (MySqlException msedel)
+            {
+                Error = "Error SQL: " + msedel.Message;
+            }
+            catch (Exception generaldel)
+            {
+                Error = "Se elimino anteriormente: " + generaldel.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        /// <summary>
+        /// Actualiza datos MySQL, necesita tabla, campo, id y valorID
+        /// </summary>
+        /// <param name="tabla">En la tabla ha actualizar</param>
+        /// <param name="campo">El campo a actualizar</param>
+        /// <param name="id">En el id a acualizar</param>
+        /// <param name="valorid">Valor a </param>
+        /// <returns></returns>
+        public bool Actualizar(string tabla, string campo, string id, string valorid)
+        {
+            bool res = false;
+            string query = "UPDATE " + tabla + " SET " + campo + " WHERE " + id + " = " + valorid;
+            try
+            {
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "Error al actualizar: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        /// <summary>
+        /// Inserta datos MySQL, requiere tabla, campos y los valores
+        /// </summary>
+        /// <param name="tabla">Tabla a donde insertar</param>
+        /// <param name="campos">Campos a donde insertar</param>
+        /// <param name="valores">Valor a insertar en los campos</param>
+        /// <returns>Regresa True o False</returns>
+        public bool Insertar(string tabla, string campos, string valores)
+        {
+            bool res = false;
+            try
+            {
+                string query = "INSERT INTO " + tabla + " (" + campos + ") VALUES (" + valores + ")";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "El usuario no existe: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        #endregion
+    }
+}
