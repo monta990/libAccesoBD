@@ -19,11 +19,10 @@ namespace libAccesoBD
         public static MySqlDataReader Lector; //lector mysql
         private string mysqlcon, archivoconfig = "mysql.ini";
         ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
-        #region Metodos MySQL
         /// <summary>
-        /// Conecta BD MySQL, regresa true o false
+        /// Conecta BD MySQL
         /// </summary>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool ConectaDB()
         {
             bool res = false;
@@ -53,9 +52,9 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Desconecta de BD MySQL, regresa true o false
+        /// Desconecta de BD MySQL
         /// </summary>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool DesconectarDB()
         {
             bool res = false;
@@ -82,7 +81,7 @@ namespace libAccesoBD
         /// </summary>
         /// <param name="usuario">Nombre Usuarios</param>
         /// <param name="pass">Contraseña Usuario</param>
-        /// <returns></returns>
+        /// <returns>True o False</returns>
         public bool Login(string usuario, string pass)
         {
             bool res = false;
@@ -149,7 +148,7 @@ namespace libAccesoBD
         /// </summary>
         /// <param name="campos">campos a leer</param>
         /// <param name="tabla">tabla a leer</param>
-        /// <returns></returns>
+        /// <returns>True o False</returns>
         public bool Leer(string campos, string tabla)
         {
             bool res = false;
@@ -180,12 +179,12 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Eliminar datos MySQL, indicando tabla, WHERE y id
+        /// Eliminar datos MySQL, indicando tabla, WHERE e id
         /// </summary>
         /// <param name="tabla">Tabla donde se va eliminar</param>
         /// <param name="donde">Que eliminar</param>
         /// <param name="id">Identificador</param>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool Eliminar(string tabla, string donde, string id)
         {
             bool res = false;
@@ -283,35 +282,5 @@ namespace libAccesoBD
             }
             return res;
         }
-        public bool InsertarImagen(string tabla, string campos, string valores, byte[] ima)
-        {
-            bool res = false;
-            try
-            {
-                string query = "INSERT INTO " + tabla + " (" + campos + ") VALUES ("+ valores +""+","+"@image)";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.Parameters.Add("@image", MySqlDbType.LongBlob);
-                com.Parameters["@image"].Value = ima;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                res = true;
-            }
-            catch (MySqlException mse)
-            {
-                Error = "Error SQL: " + mse.Message;
-            }
-            catch (Exception general)
-            {
-                Error = "El usuario no existe: " + general.Message;
-            }
-            finally
-            {
-                DesconectarDB();
-            }
-            return res;
-        }
-        #endregion
     }
 }

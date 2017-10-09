@@ -19,9 +19,9 @@ namespace libAccesoBD
         private string postgresqlcon, archivoconfig = "postgresql.ini";
         ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         /// <summary>
-        /// Conecta BD PostgreSQL, regresa true o false
+        /// Conecta BD PostgreSQL
         /// </summary>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool ConectaDB()
         {
             bool res = false;
@@ -53,7 +53,7 @@ namespace libAccesoBD
         /// <summary>
         /// Desconecta de BD PostgreSQL
         /// </summary>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool DesconectarDB()
         {
             bool res = false;
@@ -80,7 +80,7 @@ namespace libAccesoBD
         /// </summary>
         /// <param name="usuario">Nombre Usuarios</param>
         /// <param name="pass">Contraseña Usuario</param>
-        /// <returns></returns>
+        /// <returns>True o False</returns>
         public bool Login(string usuario, string pass)
         {
             bool res = false;
@@ -145,9 +145,9 @@ namespace libAccesoBD
         /// <summary>
         /// Consulta Select PostgreSQL, indicar campos y tabla
         /// </summary>
-        /// <param name="campos">campos a leer</param>
-        /// <param name="tabla">tabla a leer</param>
-        /// <returns></returns>
+        /// <param name="campos">Campos a leer</param>
+        /// <param name="tabla">Tabla a leer</param>
+        /// <returns>True o False</returns>
         public bool Leer(string campos, string tabla)
         {
             bool res = false;
@@ -178,12 +178,12 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Eliminar datos PostgreSQL, indicando tabla, WHERE y id
+        /// Eliminar datos PostgreSQL, indicando tabla, WHERE e id
         /// </summary>
         /// <param name="tabla">Tabla donde se va eliminar</param>
         /// <param name="donde">Que eliminar</param>
         /// <param name="id">Identificador</param>
-        /// <returns>Regresa True o False</returns>
+        /// <returns>True o False</returns>
         public bool Eliminar(string tabla, string donde, string id)
         {
             bool res = false;
@@ -219,7 +219,7 @@ namespace libAccesoBD
         /// <param name="campo">El campo a actualizar</param>
         /// <param name="id">En el id a acualizar</param>
         /// <param name="valorid">Valor a </param>
-        /// <returns></returns>
+        /// <returns>True o False</returns>
         public bool Actualizar(string tabla, string campo, string id, string valorid)
         {
             bool res = false;
