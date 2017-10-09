@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using LibArchivo;
 
 namespace libAccesoBD
 {
@@ -15,8 +16,9 @@ namespace libAccesoBD
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
-        public static MySqlDataReader Lector; //lector mysql
-
+        public static MySqlDataReader Lector; //lector mysq
+        private string mysqlcon, archivoconfig = "mysql.ini";
+        ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         #region Metodos MySQL
         /// <summary>
         /// Conecta BD MySQL, regresa true o false
@@ -25,21 +27,31 @@ namespace libAccesoBD
         public bool ConectaDB()
         {
             bool res = false;
-            try
+            if (Files.MySqlConnectionRead(archivoconfig) == true)
             {
-                //con = new MySqlConnection("Server = mysql5012.smarterasp.net;Database=db_a29873_perloan;Uid=a29873_perloan;Pwd=elias986");  //online
-                con = new MySqlConnection("Server = 127.0.0.1;Database=prestamos;Uid=root;Pwd=alvarez");  //offline
-                con.Open();
-                res = true;
+                this.mysqlcon = Files.mysqlcon;
+                try
+                {
+                    //con = new MySqlConnection("Server = mysql5012.smarterasp.net;Database=db_a29873_perloan;Uid=a29873_perloan;Pwd=elias986");  //online
+                    //con = new MySqlConnection("Server = 127.0.0.1;Database=prestamos;Uid=root;Pwd=alvarez");  //offline
+                    con = new MySqlConnection(mysqlcon);
+                    con.Open();
+                    res = true;
+                }
+                catch (MySqlException mse)
+                {
+                    Error = "Error SQL al conectar. " + mse.Message;
+                }
+                catch (Exception general)
+                {
+                    Error = "Error general al conectar. " + general.Message;
+                }
             }
-            catch (MySqlException mse)
+            else
             {
-                Error = "Error SQL al conectar. " + mse.Message;
+                Error = "Fallo leer archivo de configuración BD de MySQL";
             }
-            catch (Exception general)
-            {
-                Error = "Error general al conectar. " + general.Message;
-            }
+            
             return res;
         }
         /// <summary>
@@ -256,6 +268,35 @@ namespace libAccesoBD
                 com.CommandText = query;
                 ConectaDB();
                 com.Connection = this.con;
+                com.ExecuteNonQuery();      //conexión arreglada fin
+                res = true;
+            }
+            catch (MySqlException mse)
+            {
+                Error = "Error SQL: " + mse.Message;
+            }
+            catch (Exception general)
+            {
+                Error = "El usuario no existe: " + general.Message;
+            }
+            finally
+            {
+                DesconectarDB();
+            }
+            return res;
+        }
+        public bool InsertarImagen(string tabla, string campos, string valores, byte[] ima)
+        {
+            bool res = false;
+            try
+            {
+                string query = "INSERT INTO " + tabla + " (" + campos + ") VALUES ("+ valores +""+","+"@image)";
+                com = new MySqlCommand();   //conexión arreglada inicio
+                com.CommandText = query;
+                ConectaDB();
+                com.Connection = this.con;
+                com.Parameters.Add("@image", MySqlDbType.LongBlob);
+                com.Parameters["@image"].Value = ima;
                 com.ExecuteNonQuery();      //conexión arreglada fin
                 res = true;
             }
