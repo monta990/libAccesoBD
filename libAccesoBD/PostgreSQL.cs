@@ -10,16 +10,16 @@ namespace libAccesoBD
 {
     class PostgreSQL
     {
-        NpgsqlConnection con; // mysql conexión
-        NpgsqlCommand com; //comandos a realizar mysql
+        NpgsqlConnection con; // PostgreSQL conexión
+        NpgsqlCommand com; //comandos a realizar PostgreSQL
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
-        public static NpgsqlDataReader Lector; //lector mysql
+        public static NpgsqlDataReader Lector; //lector PostgreSQL
         private string postgresqlcon, archivoconfig = "postgresql.ini";
         ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         /// <summary>
-        /// Conecta BD SQL Server, regresa true o false
+        /// Conecta BD PostgreSQL, regresa true o false
         /// </summary>
         /// <returns>Regresa True o False</returns>
         public bool ConectaDB()
@@ -51,7 +51,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Desconecta de BD SQL Server
+        /// Desconecta de BD PostgreSQL
         /// </summary>
         /// <returns>Regresa True o False</returns>
         public bool DesconectarDB()
@@ -76,7 +76,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Inicia sesión usando SQL Server, recibe nombre de usuario y contraseña
+        /// Inicia sesión usando PostgreSQL, recibe nombre de usuario y contraseña
         /// </summary>
         /// <param name="usuario">Nombre Usuarios</param>
         /// <param name="pass">Contraseña Usuario</param>
@@ -143,7 +143,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Consulta Select SQL Server, indicar campos y tabla
+        /// Consulta Select PostgreSQL, indicar campos y tabla
         /// </summary>
         /// <param name="campos">campos a leer</param>
         /// <param name="tabla">tabla a leer</param>
@@ -178,7 +178,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Eliminar datos SQL Server, indicando tabla, WHERE y id
+        /// Eliminar datos PostgreSQL, indicando tabla, WHERE y id
         /// </summary>
         /// <param name="tabla">Tabla donde se va eliminar</param>
         /// <param name="donde">Que eliminar</param>
@@ -213,7 +213,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Actualiza datos SQL Server, necesita tabla, campo, id y valorID
+        /// Actualiza datos PostgreSQL, necesita tabla, campo, id y valorID
         /// </summary>
         /// <param name="tabla">En la tabla ha actualizar</param>
         /// <param name="campo">El campo a actualizar</param>
@@ -248,7 +248,7 @@ namespace libAccesoBD
             return res;
         }
         /// <summary>
-        /// Inserta datos SQL Server, requiere tabla, campos y los valores
+        /// Inserta datos PostgreSQL, requiere tabla, campos y los valores
         /// </summary>
         /// <param name="tabla">Tabla a donde insertar</param>
         /// <param name="campos">Campos a donde insertar</param>
