@@ -16,7 +16,7 @@ namespace libAccesoBD
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
-        public static MySqlDataReader Lector; //lector mysq
+        public static MySqlDataReader Lector; //lector mysql
         private string mysqlcon, archivoconfig = "mysql.ini";
         ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         #region Metodos MySQL
@@ -32,8 +32,6 @@ namespace libAccesoBD
                 this.mysqlcon = Files.mysqlcon;
                 try
                 {
-                    //con = new MySqlConnection("Server = mysql5012.smarterasp.net;Database=db_a29873_perloan;Uid=a29873_perloan;Pwd=elias986");  //online
-                    //con = new MySqlConnection("Server = 127.0.0.1;Database=prestamos;Uid=root;Pwd=alvarez");  //offline
                     con = new MySqlConnection(mysqlcon);
                     con.Open();
                     res = true;
