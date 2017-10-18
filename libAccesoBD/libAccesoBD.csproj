@@ -54,7 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Icrud.cs" />
+    <Compile Include="Conectora.cs" />
+    <Compile Include="Idb.cs" />
     <Compile Include="MySQL.cs" />
     <Compile Include="PostgreSQL.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

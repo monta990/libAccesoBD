@@ -5,20 +5,21 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using MySql.Data.MySqlClient;
+using System.Reflection;
 using LibArchivo;
 
 namespace libAccesoBD
 {
-    public class MySQL
+    public class MySQL : Idb
     {
-        MySqlConnection con; // mysql conexión
-        MySqlCommand com; //comandos a realizar mysql
+        private MySqlConnection con; // mysql conexión
+        private MySqlCommand com; //comandos a realizar mysql
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
         public static MySqlDataReader Lector; //lector mysql
         private string mysqlcon, archivoconfig = "mysql.ini";
-        ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
+        private ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         /// <summary>
         /// Conecta BD MySQL
         /// </summary>
@@ -73,73 +74,6 @@ namespace libAccesoBD
             catch (Exception general)
             {
                 Error = "Error general al desconectar. " + general.Message;
-            }
-            return res;
-        }
-        /// <summary>
-        /// Inicia sesión usando MySQL, recibe nombre de usuario y contraseña
-        /// </summary>
-        /// <param name="usuario">Nombre Usuarios</param>
-        /// <param name="pass">Contraseña Usuario</param>
-        /// <returns>True o False</returns>
-        public bool Login(string usuario, string pass)
-        {
-            bool res = false;
-            try
-            {
-                string query = "SELECT * FROM usuarios WHERE user = '" + usuario + "' AND pass = '" + pass + "'";
-                com = new MySqlCommand();   //conexión arreglada inicio
-                com.CommandText = query;
-                ConectaDB();
-                com.Connection = this.con;
-                com.ExecuteNonQuery();      //conexión arreglada fin
-                Lector = com.ExecuteReader();
-                if (!Lector.HasRows)
-                {
-                    Error = "Usuario y contraseña incorrectos. ";
-                    res = false;
-                }
-                else
-                {
-                    while (Lector.Read())
-                    {
-                        if (Lector.GetString(7) == "No") //verifica si usuario esta activo
-                        {
-                            Error = "Usuario Inactivo. ";
-                            res = false;
-                        }
-                        else
-                        {
-                            nombre = Lector.GetString(3);
-                            ApellidoP = Lector.GetString(4);
-                            ApellidoM = Lector.GetString(5);
-                            nivel = Lector.GetString(0);
-                            if (Lector.GetString(0) == "Administrador") //verifica si es admin
-                            {
-                                valor = 0;
-                                res = true;
-                            }
-                            if (Lector.GetString(0) == "Cobrador") //verifica si es cobrador
-                            {
-                                valor = 1;
-                                res = true;
-                            }
-                        }
-
-                    }
-                }
-            }
-            catch (MySqlException mse)
-            {
-                Error = "Error SQL al Seleccionar. " + mse.Message;
-            }
-            catch (Exception gen)
-            {
-                Error = "Error de conexión a la BD. " + gen.Message;
-            }
-            finally
-            {
-                DesconectarDB();
             }
             return res;
         }

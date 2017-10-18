@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Reflection;
 using System.Threading.Tasks;
 using System.Data.SqlClient;
 using LibArchivo;
 
 namespace libAccesoBD
 {
-    class MSsqlServer
+    public class MSsqlServer : Idb
     {
-        SqlConnection con; // SQL Server conexión
-        SqlCommand com; //comandos a realizar SQL Server
+        private SqlConnection con; // SQL Server conexión
+        private SqlCommand com; //comandos a realizar SQL Server
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
         public static SqlDataReader Lector; //lector SQL Server
         private string sqlcon, archivoconfig = "mssqlserver.ini";
-        ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
+        private ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         /// <summary>
         /// Conecta BD SQL Server
         /// </summary>

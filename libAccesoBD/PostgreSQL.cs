@@ -8,16 +8,16 @@ using LibArchivo;
 
 namespace libAccesoBD
 {
-    class PostgreSQL
+    public class PostgreSQL : Idb
     {
-        NpgsqlConnection con; // PostgreSQL conexión
-        NpgsqlCommand com; //comandos a realizar PostgreSQL
+        private NpgsqlConnection con; // PostgreSQL conexión
+        private NpgsqlCommand com; //comandos a realizar PostgreSQL
         public static string Error, Error2; //guarda el mensaje de error
         public static string nombre, ApellidoP, ApellidoM, nivel; //datos del usuario activo
         public static int valor; //nivel de acceso
         public static NpgsqlDataReader Lector; //lector PostgreSQL
         private string postgresqlcon, archivoconfig = "postgresql.ini";
-        ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
+        private ArchivosBD Files = new ArchivosBD(); //leer archivo de configuración
         /// <summary>
         /// Conecta BD PostgreSQL
         /// </summary>
