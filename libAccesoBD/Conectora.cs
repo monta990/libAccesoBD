@@ -45,7 +45,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(10);
             Objmysql.Leer(campos, tabla);
-            Stamp("Fin de lectura con: Hilo Leer en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de lectura con: Hilo Leer en MySQL " + DateTime.Now.Hour+":"+DateTime.Now.Minute+":"+DateTime.Now.Second+":"+DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -55,7 +55,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(20);
             Objmssqlserver.Leer(campos, tabla);
-            Stamp("Fin de lectura con: Hilo Leer en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de lectura con: Hilo Leer en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -65,7 +65,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(30);
             Objpostgresql.Leer(campos, tabla);
-            Stamp("Fin de lectura con: Hilo Leer en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de lectura con: Hilo Leer en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         public bool Leer(string campos, string tabla)
@@ -87,12 +87,12 @@ namespace libAccesoBD
             {
                 Name = "Hilo Leer en PostgreSQL"
             };
-            Stamp("Inicio de lectura con: Hilo Leer en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de lectura con: Hilo Leer en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloLeerMySQL.Start();
-            Stamp("Inicio de lectura con: Hilo Leer en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de lectura con: Hilo Leer en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloLeerMSSQL.Start();
             HiloLeerMSSQL.Join();
-            Stamp("Inicio de lectura con: Hilo Leer en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de lectura con: Hilo Leer en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloLeerPostgreSQL.Start();
             HiloLeerPostgreSQL.Join();
             //Objmysql.Leer(campos, tabla);
@@ -109,17 +109,17 @@ namespace libAccesoBD
         {
             sem.WaitOne(10);
             Objmysql.Insertar(tabla, campos, valores);
-            Stamp("Fin de Escritura con: Hilo Escritura en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Escritura con: Hilo Escritura en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
-        /// Leer MSSQL
+        /// Insertar MSSQL
         /// </summary>
         public void InsertarMSSSQL()
         {
             sem.WaitOne(20);
             Objmssqlserver.Insertar(tabla, campos, valores);
-            Stamp("Fin de Escritura con: Hilo Escritura en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Escritura con: Hilo Escritura en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -129,7 +129,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(30);
             Objpostgresql.Insertar(tabla, campos, valores);
-            Stamp("Fin de Escritura con: Hilo Escritura en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Escritura con: Hilo Escritura en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         public bool Insertar(string tabla, string campos, string valores)
@@ -152,12 +152,12 @@ namespace libAccesoBD
             {
                 Name = "Hilo Escritura en PostgreSQL"
             };
-            Stamp("Inicio de Escritura con: Hilo Escritura en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Escritura con: Hilo Escritura en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEscrituraMySQL.Start();
-            Stamp("Inicio de Escritura con: Hilo Escritura en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Escritura con: Hilo Escritura en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEscrituraMSSQL.Start();
             HiloEscrituraMSSQL.Join();
-            Stamp("Inicio de Escritura con: Hilo Escritura en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Escritura con: Hilo Escritura en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEscrituraPostgreSQL.Start();
             HiloEscrituraPostgreSQL.Join();
             //Objmysql.Insertar(tabla, campos, valores);
@@ -174,7 +174,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(10);
             Objmysql.Eliminar(tabla, donde, id);
-            Stamp("Fin de Eliminar con: Hilo Eliminar en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Eliminar con: Hilo Eliminar en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -184,7 +184,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(20);
             Objmssqlserver.Eliminar(tabla, donde, id);
-            Stamp("Fin de Eliminar con: Hilo Eliminar en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Eliminar con: Hilo Eliminar en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -194,7 +194,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(30);
             Objpostgresql.Eliminar(tabla, donde, id);
-            Stamp("Fin de Eliminar con: Hilo Eliminar en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Eliminar con: Hilo Eliminar en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         public bool Eliminar(string tabla, string donde, string id)
@@ -217,12 +217,12 @@ namespace libAccesoBD
             {
                 Name = "Hilo Eliminar en PostgreSQL"
             };
-            Stamp("Inicio de Eliminar con: Hilo Eliminar en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Eliminar con: Hilo Eliminar en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEliminarMySQL.Start();
-            Stamp("Inicio de Eliminar con: Hilo Eliminar en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Eliminar con: Hilo Eliminar en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEliminarMSSQL.Start();
             HiloEliminarMSSQL.Join();
-            Stamp("Inicio de Eliminar con: Hilo Eliminar en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Eliminar con: Hilo Eliminar en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloEliminarPostgreSQL.Start();
             HiloEliminarPostgreSQL.Join();
             //Objmysql.Eliminar(tabla, donde, id);
@@ -239,7 +239,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(10);
             Objmysql.Actualizar(tabla, campos, id, valorid);
-            Stamp("Fin de Actualizar con: Hilo Actualizar en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Actualizar con: Hilo Actualizar en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -249,7 +249,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(20);
             Objmssqlserver.Actualizar(tabla, campos, id, valorid);
-            Stamp("Fin de Actualizar con: Hilo Actualizar en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Actualizar con: Hilo Actualizar en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         /// <summary>
@@ -259,7 +259,7 @@ namespace libAccesoBD
         {
             sem.WaitOne(30);
             Objpostgresql.Actualizar(tabla, campos, id, valorid);
-            Stamp("Fin de Actualizar con: Hilo Actualizar en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Fin de Actualizar con: Hilo Actualizar en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             sem.Release();
         }
         public bool Actualizar(string tabla, string campos, string id, string valorid)
@@ -286,12 +286,12 @@ namespace libAccesoBD
             {
                 Name = "Hilo Actualizar en PostgreSQL"
             };
-            Stamp("Inicio de Actualizar con: Hilo Actualizar en MySQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Actualizar con: Hilo Actualizar en MySQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloActualizarMySQL.Start();
-            Stamp("Inicio de Actualizar con: Hilo Actualizar en MSSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Actualizar con: Hilo Actualizar en MSSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloActualizarMSSQL.Start();
             HiloActualizarMSSQL.Join();
-            Stamp("Inicio de Actualizar con: Hilo Actualizar en PostgreSQL " + DateTime.Now.ToLongTimeString());
+            Stamp("Inicio de Actualizar con: Hilo Actualizar en PostgreSQL " + DateTime.Now.Hour + ":" + DateTime.Now.Minute + ":" + DateTime.Now.Second + ":" + DateTime.Now.Millisecond);
             HiloActualizarPostgreSQL.Start();
             HiloActualizarPostgreSQL.Join();
             return status;
