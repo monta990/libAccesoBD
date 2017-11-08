@@ -14,6 +14,7 @@ namespace libAccesoBD
         Idb Objpostgresql = new PostgreSQL();
         Idb Objmssqlserver = new MSsqlServer();
         static Semaphore sem = new Semaphore(1, 2); //para semaforo
+        static object locker = new object(); //para monitor
         private string campos;
         private string tabla;
         private string valores;
@@ -24,12 +25,13 @@ namespace libAccesoBD
         /// <returns>True o False</returns>
         public bool Stamp(string texto)
         {
-            bool status= false;
-            Thread.Sleep(5);
+            Monitor.Enter(locker);
+            bool status = false;
             using (StreamWriter sw = new StreamWriter(@"D:\logDB.txt", true))
             {
                 sw.WriteLine(texto);
             }
+            Monitor.Exit(locker);
             return status;
         }
         #region Insertar
@@ -52,7 +54,6 @@ namespace libAccesoBD
             Objmysql.Leer(campos, tabla);
             Stamp("Fin de lectura con: Hilo Leer en MySQL " + DateTime.Now.ToLongTimeString());
             sem.Release();
-            //Thread.Sleep(10);
         }
         /// <summary>
         /// Leer MSSQL
@@ -63,7 +64,6 @@ namespace libAccesoBD
             Objmssqlserver.Leer(campos, tabla);
             Stamp("Fin de lectura con: Hilo Leer en MSSQL " + DateTime.Now.ToLongTimeString());
             sem.Release();
-            //Thread.Sleep(20);
         }
         /// <summary>
         /// Leer PostgreSQL
@@ -74,7 +74,6 @@ namespace libAccesoBD
             Objpostgresql.Leer(campos, tabla);
             Stamp("Fin de lectura con: Hilo Leer en PostgreSQL " + DateTime.Now.ToLongTimeString());
             sem.Release();
-            //Thread.Sleep(30);
         }
         public bool Leer(string campos, string tabla)
         {
