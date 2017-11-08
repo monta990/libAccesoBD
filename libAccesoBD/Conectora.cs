@@ -8,40 +8,60 @@ using System.IO;
 
 namespace libAccesoBD
 {
+    /// <summary>
+    /// Clase conectora para administrar tres bases de datos a la vez
+    /// </summary>
     public class Conectora
     {
+        /// <summary>
+        /// Objeto de mysql
+        /// </summary>
         Idb Objmysql = new MySQL();
+        /// <summary>
+        /// Objeto de PostgreSQL
+        /// </summary>
         Idb Objpostgresql = new PostgreSQL();
+        /// <summary>
+        /// Objeto de MS SQL
+        /// </summary>
         Idb Objmssqlserver = new MSsqlServer();
+        /// <summary>
+        /// Instanciación y parametrisación se semaforo
+        /// </summary>
         static Semaphore sem = new Semaphore(1, 2); //para semaforo
+        /// <summary>
+        /// Objeto locker para monitor
+        /// </summary>
         static object locker = new object(); //para monitor
+        #region Variables de clase
         private string campos;
         private string tabla;
         private string valores;
         private string donde;
         private string id;
         private string valorid;
+        #endregion Fin se variables de clase
         /// <summary>
-        /// Guardar en archivo
+        /// Guardar en un archivo de log el tiempo de inicio y fin de cada hilo con el nombre el mismo
         /// </summary>
         /// <param name="texto">Texto a escribir</param>
-        /// <returns>True o False</returns>
+        /// <returns>True si se puedo escribir en archivo o False si no se puede escribir en el archivo</returns>
         public bool Stamp(string texto)
         {
-            Monitor.Enter(locker);
+            Monitor.Enter(locker);//inicio de sección critica
             bool status = false;
             using (StreamWriter sw = new StreamWriter(@"D:\logDB.txt", true))
             {
                 sw.WriteLine(texto);
             }
-            Monitor.Exit(locker);
+            Monitor.Exit(locker);//fin de sección critica
             return status;
         }
-        #region Leer
+        #region Leer desde bases de datos
         /// <summary>
         /// Leer MySQL
         /// </summary>
-        public void LeerMySQL()
+        private void LeerMySQL()
         {
             sem.WaitOne(10);
             Objmysql.Leer(campos, tabla);
@@ -51,7 +71,7 @@ namespace libAccesoBD
         /// <summary>
         /// Leer MSSQL
         /// </summary>
-        public void LeerMSSSQL()
+        private void LeerMSSSQL()
         {
             sem.WaitOne(20);
             Objmssqlserver.Leer(campos, tabla);
@@ -61,7 +81,7 @@ namespace libAccesoBD
         /// <summary>
         /// Leer PostgreSQL
         /// </summary>
-        public void LeerPostgreSQL()
+        private void LeerPostgreSQL()
         {
             sem.WaitOne(30);
             Objpostgresql.Leer(campos, tabla);
@@ -101,7 +121,7 @@ namespace libAccesoBD
             return status;
         }
         #endregion Fin de Leer
-        #region Insertar
+        #region Insertar a bases de datos
         /// <summary>
         /// Insertar MySQL
         /// </summary>
@@ -166,11 +186,11 @@ namespace libAccesoBD
             return status;
         }
         #endregion Fin de insertar
-        #region Eliminar
+        #region Eliminar en bases de datos
         /// <summary>
         /// Eliminar MySQL
         /// </summary>
-        public void EliminarMySQL()
+        private void EliminarMySQL()
         {
             sem.WaitOne(10);
             Objmysql.Eliminar(tabla, donde, id);
@@ -180,7 +200,7 @@ namespace libAccesoBD
         /// <summary>
         /// Leer MSSQL
         /// </summary>
-        public void EliminarMSSSQL()
+        private void EliminarMSSSQL()
         {
             sem.WaitOne(20);
             Objmssqlserver.Eliminar(tabla, donde, id);
@@ -190,7 +210,7 @@ namespace libAccesoBD
         /// <summary>
         /// Eliminar PostgreSQL
         /// </summary>
-        public void EliminarPostgreSQL()
+        private void EliminarPostgreSQL()
         {
             sem.WaitOne(30);
             Objpostgresql.Eliminar(tabla, donde, id);
@@ -231,11 +251,11 @@ namespace libAccesoBD
             return status;
         }
         #endregion Eliminar
-        #region Actualizar
+        #region Actualizar en bases de datos
         /// <summary>
         /// Actualizar MySQL
         /// </summary>
-        public void ActualizarMySQL()
+        private void ActualizarMySQL()
         {
             sem.WaitOne(10);
             Objmysql.Actualizar(tabla, campos, id, valorid);
@@ -245,7 +265,7 @@ namespace libAccesoBD
         /// <summary>
         /// Actualizar MSSQL
         /// </summary>
-        public void ActualizarMSSSQL()
+        private void ActualizarMSSSQL()
         {
             sem.WaitOne(20);
             Objmssqlserver.Actualizar(tabla, campos, id, valorid);
@@ -255,7 +275,7 @@ namespace libAccesoBD
         /// <summary>
         /// Leer PostgreSQL
         /// </summary>
-        public void ActualizarPostgreSQL()
+        private void ActualizarPostgreSQL()
         {
             sem.WaitOne(30);
             Objpostgresql.Actualizar(tabla, campos, id, valorid);
