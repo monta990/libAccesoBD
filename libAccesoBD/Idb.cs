@@ -9,7 +9,7 @@ namespace libAccesoBD
     interface Idb
     {
         /// <summary>
-        /// Datos a leer de la base de datos
+        /// Datos a leer de la base de datos interface
         /// </summary>
         /// <param name="campos">Campos a buscar</param>
         /// <param name="tabla">Tabla en la cual buscar</param>

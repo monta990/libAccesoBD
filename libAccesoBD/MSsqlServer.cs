@@ -87,7 +87,7 @@ namespace libAccesoBD
             bool res = false;
             try
             {
-                string query = "SELECT * FROM usuarios WHERE user = '" + usuario + "' AND pass = '" + pass + "'";
+                string query = "SELECT * FROM usuarios WHERE usuario = '" + usuario + "' AND pass = '" + pass + "'";
                 com = new SqlCommand();   //conexión arreglada inicio
                 com.CommandText = query;
                 ConectaDB();
